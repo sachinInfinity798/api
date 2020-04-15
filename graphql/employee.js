@@ -125,7 +125,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     Address: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: GraphQLString
                     },
                     DOB: {
                         type: new GraphQLNonNull(GraphQLDate)
@@ -163,7 +163,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     Address: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: GraphQLString
                     },
                     DOB: {
                         type: new GraphQLNonNull(GraphQLDate)
