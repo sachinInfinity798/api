@@ -6,10 +6,13 @@ var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
 var GraphQLInt = require('graphql').GraphQLInt;
-//var GraphQLNumber = require('graphql-number');
 var GraphQLDate = require('graphql-date');
 
-var EmployeeModel = require('../models/employeeSchema');
+var emparrobjlist = [
+    { _id: "5e995f7126b0af6c35ba09f1", Name: "Pankaj kumar", Address: "Flat no 101 Sec 50", DOB: new Date("1985-03-29T01:55:13.531Z"), Gender: "Male", City: "Mumbai", Email: "pankajkumar@gmail.com", Mobile: "8888888888" },
+    { _id: "5e995f8626b0af6c35ba09f2", Name: "Pramod Kumar", Address: "Flat no 202 Sec 35", DOB: new Date("1982-04-14T01:55:13.531Z"), Gender: "Male", City: "Delhi", Email: "pramodkumar@gmail.com", Mobile: "7777777777" },
+    { _id: "5e995f9726b0af6c35ba09f3", Name: "Pooja Kumari", Address: "Flat no 303 Sec 73", DOB: new Date("1988-03-17T01:55:13.531Z"), Gender: "Female", City: "Meerut", Email: "pooja@gmail.com", Mobile: "9999999999" },
+    { _id: "5e995f9726b0af6c35ba09f4", Name: "Sanjeev Singh", Address: "Flat no 404 Sec 145", DOB: new Date("1992-03-06T01:55:13.531Z"), Gender: "Male", City: "Shimla", Email: "sanjeev@gmail.com", Mobile: "1111111111" }];
 
 var cityarray = [{ Name: 'Noida' }, { Name: 'Delhi' }, { Name: 'Pune' }, { Name: 'Mumbai' }, { Name: 'Agra' }, { Name: 'Meerut' }, { Name: 'Shimla' }]
 var cityType = new GraphQLObjectType({
@@ -53,6 +56,16 @@ var employeeType = new GraphQLObjectType({
         }
     }
 });
+var listCountType = new GraphQLObjectType({
+    name: 'count',
+    fields: function () {
+        return {
+            _id: {
+                type: GraphQLString
+            }
+        }
+    }
+});
 
 
 var queryType = new GraphQLObjectType({
@@ -61,7 +74,6 @@ var queryType = new GraphQLObjectType({
         return {
             listemployees: {
                 type: new GraphQLList(employeeType),
-                totalCount: EmployeeModel.count().exec(),
                 args: {
                     first: {
                         name: "first",
@@ -73,13 +85,11 @@ var queryType = new GraphQLObjectType({
                     }
                 },
                 resolve: function (root, params) {
-                    console.log('params', params);
-                    const lists = EmployeeModel.find().limit(params.limit).skip(params.first).exec()
-                    if (!lists) {
+                    if (!emparrobjlist) {
                         throw new Error('Error')
                     }
 
-                    return lists;
+                    return emparrobjlist;
                 }
             },
             employee: {
@@ -91,11 +101,6 @@ var queryType = new GraphQLObjectType({
                     }
                 },
                 resolve: function (root, params) {
-                    const employeeDetail = EmployeeModel.findById(params.id).exec()
-                    if (!employeeDetail) {
-                        throw new Error('Error')
-                    }
-                    return employeeDetail
                 }
             },
             citylist: {
@@ -144,12 +149,15 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve: function (root, params) {
-                    const empModel = new EmployeeModel(params);
-                    const Employee = empModel.save();
-                    if (!Employee) {
+                    let addobj = {};
+                    addobj = params;
+                    let randomstring = Math.random().toString(36).slice(-8);
+                    addobj._id = randomstring;
+                    emparrobjlist.unshift(addobj);
+                    if (!addobj) {
                         throw new Error('Error');
                     }
-                    return Employee
+                    return addobj;
                 }
             },
             updateEmployee: {
@@ -182,9 +190,18 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve(root, params) {
-                    return EmployeeModel.findByIdAndUpdate(params.id, { Name: params.Name, Address: params.Address, DOB: params.DOB, Gender: params.Gender, City: params.City, Mobile: params.Mobile, Email: params.Email }, function (err) {
-                        if (err) return next(err);
-                    });
+                    let updatedobj = {};
+                    let Id = params.id;
+                    delete params.id;
+                    updatedobj = params;
+
+                    let index = emparrobjlist.findIndex(a => a._id == Id);
+                    updatedobj['_id'] = Id;
+                    emparrobjlist[index] = updatedobj;
+                    if (!updatedobj) {
+                        throw new Error('Error');
+                    }
+                    return updatedobj;
                 }
             },
             deleteEmployee: {
@@ -195,11 +212,9 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve(root, params) {
-                    const delemp = EmployeeModel.findByIdAndRemove(params.id).exec();
-                    if (!delemp) {
-                        throw new Error('Error')
-                    }
-                    return delemp;
+                    let index = emparrobjlist.findIndex(a => a._id == params.id);
+                    if (index > -1) { emparrobjlist.splice(index, 1); }
+                    return emparrobjlist[index];
                 }
             }
         }

@@ -1,5 +1,5 @@
 # GraphQL Server api folder
-Please create a mongo Db DataBase name is graphqldb for save data.
+Now we use  constant objects array in grahphql.
 
 # Install npm module
 First take a git clone of this repository and After that go that directory from terminal cd api (path of your syatem directory) and then Run npm install
