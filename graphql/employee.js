@@ -12,7 +12,8 @@ var emparrobjlist = [
     { _id: "5e995f7126b0af6c35ba09f1", Name: "Pankaj kumar", Address: "Flat no 101 Sec 50", DOB: new Date("1985-03-29T01:55:13.531Z"), Gender: "Male", City: "Mumbai", Email: "pankajkumar@gmail.com", Mobile: "8888888888" },
     { _id: "5e995f8626b0af6c35ba09f2", Name: "Pramod Kumar", Address: "Flat no 202 Sec 35", DOB: new Date("1982-04-14T01:55:13.531Z"), Gender: "Male", City: "Delhi", Email: "pramodkumar@gmail.com", Mobile: "7777777777" },
     { _id: "5e995f9726b0af6c35ba09f3", Name: "Pooja Kumari", Address: "Flat no 303 Sec 73", DOB: new Date("1988-03-17T01:55:13.531Z"), Gender: "Female", City: "Meerut", Email: "pooja@gmail.com", Mobile: "9999999999" },
-    { _id: "5e995f9726b0af6c35ba09f4", Name: "Sanjeev Singh", Address: "Flat no 404 Sec 145", DOB: new Date("1992-03-06T01:55:13.531Z"), Gender: "Male", City: "Shimla", Email: "sanjeev@gmail.com", Mobile: "1111111111" }];
+    { _id: "5e995f9726b0af6c35ba09f4", Name: "Sanjeev Singh", Address: "Flat no 404 Sec 145", DOB: new Date("1992-03-06T01:55:13.531Z"), Gender: "Male", City: "Shimla", Email: "sanjeev@gmail.com", Mobile: "1111111111" }
+];
 
 var cityarray = [{ Name: 'Noida' }, { Name: 'Delhi' }, { Name: 'Pune' }, { Name: 'Mumbai' }, { Name: 'Agra' }, { Name: 'Meerut' }, { Name: 'Shimla' }]
 var cityType = new GraphQLObjectType({
