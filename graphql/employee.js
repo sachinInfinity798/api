@@ -93,25 +93,6 @@ var queryType = new GraphQLObjectType({
                     return emparrobjlist;
                 }
             },
-            employee: {
-                type: employeeType,
-                args: {
-                    id: {
-                        name: '_id',
-                        type: GraphQLString
-                    }
-                },
-                resolve: function (root, params) {
-                    var filtered = emparrobjlist.filter(function (el) {
-                        return el._id === params.id;
-                    });
-                    console.log('filtered', filtered);
-                    if (!filtered) {
-                        throw new Error('Error')
-                    }
-                    return filtered[0];
-                }
-            },
             citylist: {
                 type: new GraphQLList(cityType),
                 resolve: function () {
@@ -203,9 +184,10 @@ var mutation = new GraphQLObjectType({
                     let Id = params.id;
                     delete params.id;
                     updatedobj = params;
-
+                    //console.log('params', params);
                     let index = emparrobjlist.findIndex(a => a._id == Id);
                     updatedobj['_id'] = Id;
+                    //console.log('updatedobj', updatedobj);
                     emparrobjlist[index] = updatedobj;
                     if (!updatedobj) {
                         throw new Error('Error');
@@ -225,7 +207,24 @@ var mutation = new GraphQLObjectType({
                     if (index > -1) { emparrobjlist.splice(index, 1); }
                     return emparrobjlist[index];
                 }
-            }
+            },
+            employee: {
+                type: employeeType,
+                args: {
+                    id: {
+                        name: '_id',
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    let index = emparrobjlist.findIndex(a => a._id == params.id);
+                    if (!emparrobjlist) {
+                        throw new Error('Error')
+                    }
+                    //console.log('mutatoiom ###', emparrobjlist);
+                    return emparrobjlist[index];
+                }
+            },
         }
     }
 });
