@@ -102,6 +102,14 @@ var queryType = new GraphQLObjectType({
                     }
                 },
                 resolve: function (root, params) {
+                    var filtered = emparrobjlist.filter(function (el) {
+                        return el._id === params.id;
+                    });
+                    console.log('filtered', filtered);
+                    if (!filtered) {
+                        throw new Error('Error')
+                    }
+                    return filtered[0];
                 }
             },
             citylist: {
